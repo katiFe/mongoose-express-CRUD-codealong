@@ -1,0 +1,10 @@
+TASK display a list with books that we have stored in the DB and that we want user to see
+
+- create a route (GET '/books')
+
+app.get('/books'), ()=> {};
+
+- make a request to the DB --> Book.find  & render= ausfuehren the view 
+- create a view (and pass the data from the database)
+
+

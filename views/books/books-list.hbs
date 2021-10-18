@@ -1,0 +1,15 @@
+
+<h1>Book List</h1>
+
+{{#each booksArr}}      {{!-- {{we are itterating through the array that we receive and we are displaying the content}} --}}
+<div class="book-summary">
+    <p>
+        Title: {{this.title}}
+    </p>
+
+    <p>
+        Author: {{this.author}}
+    </p>
+</div>
+
+{{/each}}

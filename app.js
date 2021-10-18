@@ -28,6 +28,10 @@ app.locals.title = `${capitalized(projectName)} created with IronLauncher`;
 const index = require("./routes/index");  //requiring a file inside a directory route 
 app.use("/", index);        //mounts(errichten) the middleware function ; mount waht we have in 'index' to '/'
                                 //in english: we are creating a file with all the routes for eg 'unicorns'
+
+const bookRoutes = require("./routes/bookRoutes")     //creating routes for 'book'
+app.use("/", bookRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);   //
 
