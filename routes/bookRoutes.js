@@ -22,4 +22,72 @@ router.get('/books', (req, res, next) => {
 });
 
 
-module.exports = router;           //exporting that file to other files
+router.get("/books/create", (req, res, next) => {
+
+    res.render("books/book-create");                           //no second arguement needed because we update 
+});
+
+router.post("/books/create", (req, res, next) => {
+    console.log(req.body)
+    const { title, author, description, rating } = req.body;                        //(object destructuring)req.body because the data is sent through 'post' after that pass this information
+    Book.create({ title: title, author: author, description: description, rating: rating })
+        .then(() => {
+            res.redirect("/books");
+        })
+        .catch((error) => {
+            console.log("Error adding new book to the DB", error);
+            next(error);
+        });
+    });  
+
+
+    // whenever the user makes a get request to this path we want to display the details
+    router.get("/books/:bookId", (req, res, next) => {         // Route params: books/:bookId
+        Book.findById(req.params.bookId)                    //make a query to the database to find speficic ID
+            .then((booksFromDB) => {
+
+                res.render("books/book-details", booksFromDB);
+            })
+            .catch((error) => {
+                console.log("Error getting details for a single book from DB", error);
+                next(error);
+            });
+
+    });
+
+    router.get("/books/:bookId/edit", (req, res, next) => {
+        Book.findById(req.params.bookId)
+            .then((bookFromDB) => {
+                res.render("books/book-edit", bookFromDB);
+            })
+            .catch((error)=>{
+                console.log("error, an error occured ", error)
+            next(error);
+            });
+
+    });
+
+    router.post("/books/:bookId/edit", (req, res, next)=>{
+
+        const { title, author, description, rating } = req.body;  
+        const newDetails ={
+            title,
+            author,
+            description,
+            rating
+        };  
+
+        Book.findByIdAndUpdate(req.params.bookId, newDetails, {new: true} )  //third arguement to read new information and change it in the db
+        .then((bookFromDB)=>{
+            res.redirect('/books/' + bookFromDB._id);
+        })
+        .catch((error)=>{
+            console.log("error,updating boo details ", error)
+        next(error);
+        });
+    })
+
+
+    
+
+    module.exports = router;

@@ -8,3 +8,7 @@ app.get('/books'), ()=> {};
 - create a view (and pass the data from the database)
 
 
+HAve a page with the details for each book
+
+- update booksList view with a button
+- create another view (general one, blueprint) (book-details.hbs)
