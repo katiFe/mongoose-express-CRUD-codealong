@@ -38,56 +38,66 @@ router.post("/books/create", (req, res, next) => {
             console.log("Error adding new book to the DB", error);
             next(error);
         });
-    });  
+});
 
 
-    // whenever the user makes a get request to this path we want to display the details
-    router.get("/books/:bookId", (req, res, next) => {         // Route params: books/:bookId
-        Book.findById(req.params.bookId)                    //make a query to the database to find speficic ID
-            .then((booksFromDB) => {
+// whenever the user makes a get request to this path we want to display the details
+router.get("/books/:bookId", (req, res, next) => {         // Route params: books/:bookId
+    Book.findById(req.params.bookId)                    //make a query to the database to find speficic ID
+        .then((booksFromDB) => {
 
-                res.render("books/book-details", booksFromDB);
-            })
-            .catch((error) => {
-                console.log("Error getting details for a single book from DB", error);
-                next(error);
-            });
-
-    });
-
-    router.get("/books/:bookId/edit", (req, res, next) => {
-        Book.findById(req.params.bookId)
-            .then((bookFromDB) => {
-                res.render("books/book-edit", bookFromDB);
-            })
-            .catch((error)=>{
-                console.log("error, an error occured ", error)
+            res.render("books/book-details", booksFromDB);
+        })
+        .catch((error) => {
+            console.log("Error getting details for a single book from DB", error);
             next(error);
-            });
+        });
 
-    });
+});
 
-    router.post("/books/:bookId/edit", (req, res, next)=>{
+router.get("/books/:bookId/edit", (req, res, next) => {
+    Book.findById(req.params.bookId)
+        .then((bookFromDB) => {
+            res.render("books/book-edit", bookFromDB);
+        })
+        .catch((error) => {
+            console.log("error, an error occured ", error)
+            next(error);
+        });
 
-        const { title, author, description, rating } = req.body;  
-        const newDetails ={
-            title,
-            author,
-            description,
-            rating
-        };  
+});
 
-        Book.findByIdAndUpdate(req.params.bookId, newDetails, {new: true} )  //third arguement to read new information and change it in the db
-        .then((bookFromDB)=>{
+router.post("/books/:bookId/edit", (req, res, next) => {
+
+    const { title, author, description, rating } = req.body;
+    const newDetails = {
+        title,
+        author,
+        description,
+        rating
+    };
+
+    Book.findByIdAndUpdate(req.params.bookId, newDetails, { new: true })  //third arguement to read new information and change it in the db
+        .then((bookFromDB) => {
             res.redirect('/books/' + bookFromDB._id);
         })
-        .catch((error)=>{
+        .catch((error) => {
             console.log("error,updating boo details ", error)
-        next(error);
+            next(error);
         });
-    })
+})
+
+router.post('/books/:bookId/delete', (req, res, next) => {
+    Book.findByIdAndDelete(req.params.bookId)
+        .then(() => {
+            res.redirect('/books');
+        })
+        .catch((error) => {
+            console.log("Error deleting", error);
+            next(error);
+        });
+});
 
 
-    
 
-    module.exports = router;
+module.exports = router;
