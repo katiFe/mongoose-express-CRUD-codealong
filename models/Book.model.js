@@ -6,7 +6,7 @@ const bookSchema = new Schema(                      //Schema: the template we wa
   {
     title: String,
     description: String,
-    author: String,
+    author: {type: Schema.Types.ObjectId, ref: 'Author'},
     rating: Number
   },
   {
